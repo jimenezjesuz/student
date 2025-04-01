@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Estudiantes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        input, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Gestión de Estudiantes</h2>
+
+    <h3>Crear Estudiante</h3>
+    <input type="text" id="name" placeholder="Nombre">
+    <input type="text" id="lastname" placeholder="Apellido">
+    <input type="number" id="age" placeholder="Edad">
+    <input type="text" id="codStudent" placeholder="Código de Estudiante">
+    <button onclick="saveStudent()">Guardar</button>
+
+    <h3>Buscar por Código</h3>
+    <input type="text" id="searchName" placeholder="Nombre">
+    <button onclick="searchByName()">Buscar</button>
+    <div id="searchResult"></div>
+
+    <h3>Lista de Estudiantes</h3>
+    <button onclick="listAll()">Listar Todos</button>
+    <table id="studentTable">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>Código</th>
+            <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:8080/student';
+
+    function saveStudent() {
+        const student = {
+            name: document.getElementById('name').value,
+            lastname: document.getElementById('lastname').value,
+            age: document.getElementById('age').value,
+            codStudent: document.getElementById('codStudent').value
+        };
+
+        fetch(`${API_URL}/save`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(student)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message || 'Error al guardar el estudiante'); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Estudiante guardado correctamente');
+                listAll();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`Error: ${error.message}`);
+            });
+    }
+
+    function searchByName() {
+        const name = document.getElementById('searchName').value;
+        fetch(`${API_URL}/find/${name}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('searchResult').innerHTML =
+                    `<p>${data.name} ${data.lastname}, Edad: ${data.age}, Código: ${data.codStudent}</p>`;
+            });
+    }
+
+    function listAll() {
+        fetch(`${API_URL}/all`)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#studentTable tbody');
+                tbody.innerHTML = '';
+                data.forEach(student => {
+                    tbody.innerHTML += `
+                            <tr>
+                                <td>${student.name}</td>
+                                <td>${student.lastname}</td>
+                                <td>${student.age}</td>
+                                <td>${student.codStudent}</td>
+                                <td><button onclick="deleteStudent(${student.id})">Eliminar</button></td>
+                            </tr>`;
+                });
+            });
+    }
+
+    function deleteStudent(id) {
+        fetch(`${API_URL}/delete/${id}`, {method: 'DELETE'})
+            .then(() => {
+                alert('Estudiante eliminado');
+                listAll();
+            });
+    }
+</script>
+</body>
+</html>

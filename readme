@@ -1,0 +1,71 @@
+# Proyecto de Gestión de Estudiantes
+
+Este proyecto permite gestionar estudiantes a través de una API REST en **Spring Boot** y una interfaz en **HTML, CSS y JavaScript**. A continuación, encontrarás las instrucciones para ejecutar tanto el backend como el frontend.
+
+## 🚀 Requisitos
+
+Asegúrate de tener instalados los siguientes programas:
+- [Java 11](https://adoptium.net/) (o la versión compatible con tu proyecto)
+- [Maven](https://maven.apache.org/) (para gestionar dependencias)
+- [Node.js](https://nodejs.org/) (para servir el frontend)
+
+## 🔥 1. Ejecutar el Backend (Spring Boot)
+
+1. Clona el repositorio o accede a la carpeta del proyecto.
+   ```sh
+   git clone https://github.com/jimenezjesuz/student.git
+   cd student
+   ```
+2. Configura la base de datos H2 agregando en `application.properties`:
+   ```properties
+   spring.datasource.url=jdbc:h2:mem:testdb
+   spring.datasource.driverClassName=org.h2.Driver
+   spring.datasource.username=sa
+   spring.datasource.password=
+   spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+   spring.h2.console.enabled=true
+   spring.h2.console.path=/h2-console
+   ```
+3. Compila y ejecuta el backend:
+   ```sh
+   mvn clean install
+   mvn spring-boot:run
+   ```
+4. El backend correrá en `http://localhost:8080`.
+5. Para acceder a la base de datos H2, entra a `http://localhost:8080/h2-console` y usa la URL `jdbc:h2:mem:testdb`.
+
+---
+
+## 🌐 2. Ejecutar el Frontend (HTML, CSS, JavaScript)
+
+1. Instala `http-server` (solo la primera vez):
+   ```sh
+   npm install -g http-server
+   ```
+2. Ve a la carpeta donde está el archivo `student.html`.
+   ```sh
+   cd src/main/resources/
+   ```
+3. Inicia el servidor:
+   ```sh
+   http-server -p 5500
+   ```
+4. Abre el navegador y accede a:
+   ```
+   http://localhost:5500/student.html
+   ```
+
+---
+
+## 📡 Endpoints de la API
+| Método | Endpoint              | Descripción                        |
+|--------|-----------------------|------------------------------------|
+| GET    | `/student/all`        | Listar todos los estudiantes      |
+| GET    | `/student/find/{code}`| Buscar estudiante por código      |
+| POST   | `/student/save`       | Guardar un nuevo estudiante       |
+| DELETE | `/student/delete/{id}`| Eliminar un estudiante por ID     |
+
+---
+
+
+
