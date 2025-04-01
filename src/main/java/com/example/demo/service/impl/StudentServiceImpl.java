@@ -10,7 +10,6 @@ import com.example.demo.service.EstudianteService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,12 +38,12 @@ public class StudentServiceImpl implements EstudianteService {
     }
 
     @Override
-    public void delete(Long id) {
-        Optional<Student> byId = studentRepository.findById(id);
-        if (byId.isEmpty()) {
+    public void delete(String codStudent) {
+        Student byCodStudent = studentRepository.findByCodStudent(codStudent);
+        if (byCodStudent == null) {
             return;
         }
-        studentRepository.delete(byId.get());
+        studentRepository.delete(byCodStudent);
     }
 
     public StudentDTO findByCode(String cod) {

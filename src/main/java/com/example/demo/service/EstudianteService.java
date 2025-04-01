@@ -10,7 +10,7 @@ public interface EstudianteService {
 
     List<StudentDTO> findAll();
 
-    void delete(Long id);
+    void delete(String codStudent);
 
     StudentDTO findByCode(String name);
 

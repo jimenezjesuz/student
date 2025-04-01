@@ -123,14 +123,14 @@
                                 <td>${student.lastname}</td>
                                 <td>${student.age}</td>
                                 <td>${student.codStudent}</td>
-                                <td><button onclick="deleteStudent(${student.id})">Eliminar</button></td>
+                                <td><button onclick="deleteStudent(${student.codStudent})">Eliminar</button></td>
                             </tr>`;
                 });
             });
     }
 
-    function deleteStudent(id) {
-        fetch(`${API_URL}/delete/${id}`, {method: 'DELETE'})
+    function deleteStudent(codStudent) {
+        fetch(`${API_URL}/delete/${codStudent}`, {method: 'DELETE'})
             .then(() => {
                 alert('Estudiante eliminado');
                 listAll();

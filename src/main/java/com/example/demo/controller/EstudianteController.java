@@ -25,9 +25,9 @@ public class EstudianteController {
         return ResponseEntity.ok(estudianteService.findByCode(name));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteTipoRespuesta(@PathVariable("id") Integer id) {
-        estudianteService.delete(Long.valueOf(id));
+    @DeleteMapping("/delete/{codStudent}")
+    public ResponseEntity deleteTipoRespuesta(@PathVariable("codStudent") String codStudent) {
+        estudianteService.delete(codStudent);
         return ResponseEntity.noContent()
                 .build();
     }
